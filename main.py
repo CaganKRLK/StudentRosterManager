@@ -1,6 +1,7 @@
 students = ["Ahmet","Ayşe","Mehmet","Zeynep"]
 here = []
 absent = []
+x = None
 print("Sınıf Listesi!")
 print("Hoşgeldiniz, lütfen eyleminizi seçin\n1. Yoklama al\n2. Listeyi görüntüle\n3. Öğrenci ekle/çıkar\n4. Çıkış")
 while True:
@@ -8,7 +9,7 @@ while True:
     if choice == "1":
         here.clear()
         absent.clear()
-        print("Yoklama alınıyor!\n0: Öğrenci geldi\n1: Öğrenci gelmedi\niptal: yoklamayı iptal eder")
+        print("Yoklama alınıyor!\n0: Öğrenci gelmedi\n1: Öğrenci geldi\niptal: yoklamayı iptal eder")
         for student in students:
             if x != "iptal":
                 while True:
@@ -69,24 +70,22 @@ while True:
                             break
                         else:
                             print("Hatalı Giriş!")
-                try:
-                    int(delete)
-                except:
-                    print("")
-                if not delete in students and delete != int:
-                    print(f"{students[delete+1]} listeden silinecek.\nBu işlem geri alınamaz.")
-                    while True:
-                        sure = input("Eminmisin?\n(y/n): ")
-                        if sure == "y":
-                            students.sort
-                            students.pop(delete-1)
-                            break
-                        elif sure == "n":
-                            print("Silme işlemi iptal edildi.")
-                            break
-                        else:
-                            print("Hatalı Giriş!")
-                if not delete in students and delete != int:
+                elif delete.isdigit():
+                    index = int(delete)-1
+                    if 0 <= index <= students.len():
+                        print(f"{students[index]} listeden silinecek.\nBu işlem geri alınamaz.")
+                        while True:
+                            sure = input("Eminmisin?\n(y/n): ")
+                            if sure == "y":
+                                students.sort()
+                                students.pop(delete-1)
+                                break
+                            elif sure == "n":
+                                print("Silme işlemi iptal edildi.")
+                                break
+                            else:
+                                print("Hatalı Giriş!")
+                else:
                     print("Öğrenci bulunamadı")
             elif x == "3":
                 print("Geri dönülüyor...")
