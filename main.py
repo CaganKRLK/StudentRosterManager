@@ -72,7 +72,7 @@ while True:
                             print("Hatalı Giriş!")
                 elif delete.isdigit():
                     index = int(delete)-1
-                    if 0 <= index <= len(delete):
+                    if 0 <= index <= len(students):
                         print(f"{students[index]} listeden silinecek.\nBu işlem geri alınamaz.")
                         while True:
                             sure = input("Eminmisin?\n(y/n): ")
