@@ -64,6 +64,7 @@ while True:
                         if sure == "y":
                             students.sort()
                             students.remove(delete)
+                            print("Silme işlemi başarılı.")
                             break
                         elif sure == "n":
                             print("Silme işlemi iptal edildi.")
@@ -79,6 +80,7 @@ while True:
                             if sure == "y":
                                 students.sort()
                                 students.pop(index)
+                                print("Silme işlemi başarılı.")
                                 break
                             elif sure == "n":
                                 print("Silme işlemi iptal edildi.")
