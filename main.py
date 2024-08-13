@@ -161,8 +161,6 @@ while True:
             else:
                 print(f"{type_name} log klasörü bulunamadı.")
                 return None
-
-    # Choose and display 'here' log
         here_log_path = list_and_choose_log(here_folder, 'Gelenler')
         if here_log_path:
             with open(here_log_path, 'r') as f:
@@ -170,8 +168,6 @@ while True:
                 print(f"\n{os.path.basename(here_log_path)} İçeriği:")
                 for i, student in enumerate(log_content, 1):
                     print(f"  {i}. {student}")
-
-    # Choose and display 'absent' log
         absent_log_path = list_and_choose_log(absent_folder, 'Gelmeyenler')
         if absent_log_path:
             with open(absent_log_path, 'r') as f:
