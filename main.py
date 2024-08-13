@@ -130,7 +130,35 @@ while True:
             else:
                 print("Hatalı Giriş!")
     elif choice == "4":
-        print("Sanane Yarr")
+        print("Logları Görüntüle")
+        here_folder = 'here_log'
+        absent_folder = 'absent_log'
+        if os.path.exists(here_folder):
+            print("Gelenler Logları:")
+            here_logs = [f for f in os.listdir(here_folder) if f.endswith(".json")]
+            if not here_logs:
+                print("Gelenler logu bulunamadı.")
+                for filename in sorted(here_logs):
+                    with open(os.path.join(here_folder, filename), 'r') as f:
+                        log_content = json.load(f)
+                        print(f"{filename}:")
+                        for i, student in enumerate(log_content, 1):
+                            print(f"  {i}. {student}")
+                        else:
+                            print("Gelenler log klasörü bulunamadı.")
+        if os.path.exists(absent_folder):
+            print("\nGelmeyenler Logları:")
+            absent_logs = [f for f in os.listdir(absent_folder) if f.endswith(".json")]
+            if not absent_logs:
+                print("Gelmeyenler logu bulunamadı.")
+                for filename in sorted(absent_logs):
+                    with open(os.path.join(absent_folder, filename), 'r') as f:
+                        log_content = json.load(f)
+                        print(f"{filename}:")
+                        for i, student in enumerate(log_content, 1):
+                            print(f"  {i}. {student}")
+                        else:
+                            print("Gelmeyenler log klasörü bulunamadı.")
     elif choice == "5":
         print("Uygulamadan çıkılıyor...")
         with open('students.json', 'w') as f:
