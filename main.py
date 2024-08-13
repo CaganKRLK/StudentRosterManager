@@ -1,11 +1,27 @@
-students = ["Ahmet","Ayşe","Mehmet","Zeynep"]
+import json
+import os
+from datetime import datetime
+
+students = []
 here = []
 absent = []
+try:
+    with open('students.json', 'r') as f:
+        content = f.read().strip()
+        if content:
+            students = json.loads(content)
+        else:
+            students = []
+except FileNotFoundError:
+    students = []
 x = None
+
 print("Sınıf Listesi!")
-print("Hoşgeldiniz, lütfen eyleminizi seçin\n1. Yoklama al\n2. Listeyi görüntüle\n3. Öğrenci ekle/çıkar\n4. Çıkış")
+print("Hoşgeldiniz, lütfen eyleminizi seçin")
+
 while True:
-    choice = input("(1/2/3/4): ")
+    print("1. Yoklama al\n2. Listeyi görüntüle\n3. Öğrenci ekle/çıkar\n4. Logları Görüntüle\n5. Çıkış")
+    choice = input("(1/2/3/4/5): ")
     if choice == "1":
         here.clear()
         absent.clear()
@@ -29,11 +45,27 @@ while True:
                         break
                     else:
                         print("Hatalı giriş yaptınız!")
+        hereFolder = 'here_log'
+        dateStr = datetime.now().strftime("%Y-%m-%d")
+        hereFile = f"here_{dateStr}.json"
+        herePath = os.path.join(hereFolder, hereFile)
+        if not os.path.exists(hereFolder):
+            os.makedirs(hereFolder)
+        with open(herePath, 'w') as f:
+            json.dump(here, f)
         print("Gelenler:")
         x = 0
         for student in here:
             x += 1
             print(f"{x}. {student}")
+        absentFolder = 'absent_log'
+        dateStr = datetime.now().strftime("%Y-%m-%d")
+        absentFile = f"absent_{dateStr}.json"
+        absentPath = os.path.join(absentFolder, absentFile)
+        if not os.path.exists(absentFolder):
+            os.makedirs(absentFolder)
+        with open(absentPath, 'w') as f:
+            json.dump(absent, f)
         print("Gelmeyenler:")
         x = 0
         for student in absent:
@@ -45,6 +77,9 @@ while True:
         for student in students:
             x += 1
             print(f"{x}. {student}")
+        while (20):
+            print("-",end="")
+        print()
     elif choice == "3":
         print("Listeyi Düzenle")
         while True:
@@ -95,7 +130,11 @@ while True:
             else:
                 print("Hatalı Giriş!")
     elif choice == "4":
+        print("Sanane Yarr")
+    elif choice == "5":
         print("Uygulamadan çıkılıyor...")
+        with open('students.json', 'w') as f:
+            json.dump(students, f)
         break
     else:
         print("Hatalı Giriş!")
