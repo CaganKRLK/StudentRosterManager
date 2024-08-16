@@ -3,8 +3,65 @@ import os
 from datetime import datetime
 
 students = []
-here = []
-absent = []
+heres = []
+absents = []
+hereFolder = 'here_log'
+absentFolder = 'absent_log'
+
+# class student():
+#     def __init__():
+#         studen.fname = name + sname
+#     def areTheyHere():
+#         if student.fname in heres:
+#             return True
+#         else:
+#             return False
+
+def saveRollCall(saveFolder,saveList,saveName):
+    dateStr = datetime.now().strftime("%Y-%m-%d")
+    saveFile = f"{saveName}_{dateStr}.json"
+    savePath = os.path.join(saveFolder, saveFile)
+    if not os.path.exists(saveFolder):
+        os.makedirs(saveFolder)
+    with open(savePath, 'w') as f:
+        json.dump(saveList, f)
+def list_and_choose_log(folder, type_name):
+    if os.path.exists(folder):
+        logs = [f for f in os.listdir(folder) if f.endswith(".json")]
+
+        if not logs:
+            print(f"{type_name} logu bulunamadı.")
+        print(f"\nMevcut {type_name} logları:")
+
+        for i, filename in enumerate(sorted(logs), 1):
+            print(f"{i}. {filename}")
+
+        while True:
+            try:
+                choice = int(input(f"Bir {type_name} logunu seçin (1-{len(logs)}): "))
+
+                if 1 <= choice <= len(logs):
+                    logPath = os.path.join(folder, sorted(logs)[choice - 1])
+                    break
+                else:
+                    print("Geçersiz seçim. Lütfen tekrar deneyin.")
+                    break
+            except ValueError:
+                print("Geçersiz giriş. Lütfen bir sayı girin.")
+                break
+        else:
+            print(f"{type_name} log klasörü bulunamadı.")
+
+    if logPath:
+        with open(logPath, 'r') as f:
+            logContent = json.load(f)
+            print(f"\n{os.path.basename(logPath)} İçeriği:")
+
+            for i, student in enumerate(logContent, 1):
+                print(f"  {i}. {student}")
+
+
+
 try:
     with open('students.json', 'r') as f:
         content = f.read().strip()
@@ -23,60 +80,52 @@ while True:
     print("1. Yoklama al\n2. Listeyi görüntüle\n3. Öğrenci ekle/çıkar\n4. Logları Görüntüle\n5. Çıkış")
     choice = input("(1/2/3/4/5): ")
     if choice == "1":
-        here.clear()
-        absent.clear()
+        heres.clear()
+        absents.clear()
         print("Yoklama alınıyor!\n0: Öğrenci gelmedi\n1: Öğrenci geldi\niptal: yoklamayı iptal eder")
+        complate = True
+        x = None
         for student in students:
-            if x != "iptal":
+            if x == "iptal":
+                complate = False
+                break
+            else:
                 while True:
                     x = input(f"{student} geldi mi?\n")
                     if x == "0":
-                        absent.append(student)
+                        absents.append(student)
                         print("Öğrenci gelmeyenlere eklendi.")
                         break
                     elif x == "1":
-                        here.append(student)
+                        heres.append(student)
                         print("Öğrenci gelenlere eklendi.")
                         break
                     elif x == "iptal":
-                        here.clear()
-                        absent.clear()
+                        heres.clear()
+                        absents.clear()
                         print("Yoklama iptal edildi.")
                         break
                     else:
                         print("Hatalı giriş yaptınız!")
-                hereFolder = 'here_log'
-                dateStr = datetime.now().strftime("%Y-%m-%d")
-                hereFile = f"here_{dateStr}.json"
-                herePath = os.path.join(hereFolder, hereFile)
-                if not os.path.exists(hereFolder):
-                    os.makedirs(hereFolder)
-                    with open(herePath, 'w') as f:
-                        json.dump(here, f)
-                print("Gelenler:")
-                x = 0
-                for student in here:
-                    x += 1
-                    print(f"{x}. {student}")
-                for _ in range(20):
-                    print("-",end="")
-                print()
-                absentFolder = 'absent_log'
-                dateStr = datetime.now().strftime("%Y-%m-%d")
-                absentFile = f"absent_{dateStr}.json"
-                absentPath = os.path.join(absentFolder, absentFile)
-                if not os.path.exists(absentFolder):
-                    os.makedirs(absentFolder)
-                with open(absentPath, 'w') as f:
-                    json.dump(absent, f)
-                    print("Gelmeyenler:")
-                x = 0
-                for student in absent:
-                    x += 1
-                    print(f"{x}. {student}")
-                for _ in range(20):
-                    print("-",end="")
-                print()
+        if complate:
+            saveRollCall(hereFolder,heres,"here")
+            saveRollCall(absentFolder,absents,"absent")
+            print("Gelenler:")
+            x = 0
+            for student in heres:
+                x += 1
+                print(f"{x}. {student}")
+            for _ in range(20):
+                print("-",end="")
+            print()
+            print("Gelmeyenler:")
+            x = 0
+            for student in absents:
+                x += 1
+                print(f"{x}. {student}")
+            for _ in range(20):
+                print("-",end="")
+            print()
     elif choice == "2":
         x = 0
         print("Öğrenciler:")
@@ -135,47 +184,11 @@ while True:
                 break
             else:
                 print("Hatalı Giriş!")
-
     elif choice == "4":
         print("Logları Görüntüle")
-        here_folder = 'here_log'
-        absent_folder = 'absent_log'
-        def list_and_choose_log(folder, type_name):
-            if os.path.exists(folder):
-                logs = [f for f in os.listdir(folder) if f.endswith(".json")]
-                if not logs:
-                    print(f"{type_name} logu bulunamadı.")
-                    return None
-                print(f"\nMevcut {type_name} logları:")
-                for i, filename in enumerate(sorted(logs), 1):
-                    print(f"{i}. {filename}")
-                while True:
-                    try:
-                        choice = int(input(f"Bir {type_name} logunu seçin (1-{len(logs)}): "))
-                        if 1 <= choice <= len(logs):
-                            return os.path.join(folder, sorted(logs)[choice - 1])
-                        else:
-                            print("Geçersiz seçim. Lütfen tekrar deneyin.")
-                    except ValueError:
-                        print("Geçersiz giriş. Lütfen bir sayı girin.")
-            else:
-                print(f"{type_name} log klasörü bulunamadı.")
-                return None
-        here_log_path = list_and_choose_log(here_folder, 'Gelenler')
-        if here_log_path:
-            with open(here_log_path, 'r') as f:
-                log_content = json.load(f)
-                print(f"\n{os.path.basename(here_log_path)} İçeriği:")
-                for i, student in enumerate(log_content, 1):
-                    print(f"  {i}. {student}")
-        absent_log_path = list_and_choose_log(absent_folder, 'Gelmeyenler')
-        if absent_log_path:
-            with open(absent_log_path, 'r') as f:
-                log_content = json.load(f)
-                print(f"\n{os.path.basename(absent_log_path)} İçeriği:")
-                for i, student in enumerate(log_content, 1):
-                    print(f"  {i}. {student}")
-
+        list_and_choose_log(hereFolder, 'Gelenler')
+        list_and_choose_log(absentFolder, 'Gelmeyenler')
+                     
     elif choice == "5":
         print("Uygulamadan çıkılıyor...")
         with open('students.json', 'w') as f:
